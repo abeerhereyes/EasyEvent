@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Step</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="easy-event-wrapper">
+    <div class="easy-event-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Easy<br>Event</div>
+
+            <div class="steps">
+                <div class="step done">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step done">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Customisation</div>
+                </div>
+                <div class="step done">
+                    <div class="step-number">3</div>
+                    <div class="step-label">General questions</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Summary</div>
+                </div>
+            </div>
+        </div>
+<div class="container">
+
+
+    <div class="card">
+        <div class="header">
+            <div class="subtitle">Final Step</div>
+            <h1>You're Almost Done!</h1>
+            <p>What would you like to do next?</p>
+        </div>
+
+        <div class="content">
+            <div style="text-align: center; ">
+                <div style="font-size: 64px; ">🎯</div>
+                <h2 style="font-size: 22px; color: #1f2937; margin-bottom: 15px;">What's on your mind?</h2>
+                <p style="color: #6b7280; font-size: 15px;">You've completed all the essential steps. Choose how you'd like to proceed.</p>
+            </div>
+
+            <div class="options" style="margin-top: 40px;">
+                <button class="option-btn" id="setupBtn" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none;">
+                    <div style="font-size: 32px; margin-bottom: 12px;">✅</div>
+                    <div style="font-weight: 700; font-size: 19px; margin-bottom: 8px;">Setup My Event Details</div>
+                    <div style="font-size: 14px; opacity: 0.9;">Complete the setup and submit your event</div>
+                </button>
+
+                <button class="option-btn" id="reviewBtn">
+                    <div style="font-size: 32px; margin-bottom: 12px;">👀</div>
+                    <div style="font-weight: 600; font-size: 18px; margin-bottom: 8px;">Review Again</div>
+                    <div style="font-size: 14px; color: #6b7280;">Go back and check your details</div>
+                </button>
+
+                <button class="option-btn" id="restartBtn">
+                    <div style="font-size: 32px; margin-bottom: 12px;">🔄</div>
+                    <div style="font-weight: 600; font-size: 18px; margin-bottom: 8px;">Start Over</div>
+                    <div style="font-size: 14px; color: #6b7280;">Begin a new event from scratch</div>
+                </button>
+            </div>
+
+            <div style="background: #dcfce7; border-left: 4px solid #10b981; padding: 18px; border-radius: 10px; margin-top: 30px; font-size: 14px; color: #065f46;">
+                <div style="font-weight: 700; margin-bottom: 8px;">✨ Great progress!</div>
+                <div>You've successfully configured your event. When you're ready, we'll help you finalize everything.</div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+    <div style="background: white; border-radius: 20px; padding: 40px; max-width: 400px; text-align: center; animation: fadeIn 0.3s ease;">
+        <div style="font-size: 72px">🎉</div>
+        <h2 style="font-size: 28px; color: #1f2937; margin-bottom: 15px;">Event Submitted!</h2>
+        <p style="color: #6b7280; font-size: 15px; margin-bottom: 30px;">Your event details have been successfully submitted. We'll review your information and get back to you soon.</p>
+        <button  style="width: 100%; padding: 16px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer;">
+            Create Another Event
+        </button>
+    </div>
+</div>
+</div>
+
+<script src="common.js"></script>
+<script>
+    window.__pageInitFunction__ =function initFinalPage(){
+    initProgressBar(12, 14);
+    // setupNavigation('13_review.html', null);
+
+    const setupBtn = document.getElementById('setupBtn');
+    const reviewBtn = document.getElementById('reviewBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const successModal = document.getElementById('successModal');
+
+    setupBtn.addEventListener('click', () => {
+        successModal.style.display = 'flex';
+        // In a real app, this would submit data to a backend
+        console.log('Event data:', getAllEventData());
+        clearAllData()
+        loadScreen('01_intro.html');
+    });
+
+    reviewBtn.addEventListener('click', () => {
+        loadScreen('13_review.html');
+    });
+
+    restartBtn.addEventListener('click', () => {
+        if (confirm('Are you sure you want to start over? All your current data will be lost.')) {
+            clearAllData();
+            loadScreen('01_intro.html');
+        }
+    });}
+</script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Date</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .calendar-day {
+            background: white !important;
+        }
+
+        .calendar-day.in-range {
+            background: #f5a3b8 !important;
+            color: #000 !important;
+            border-radius: 0 !important;
+        }
+
+        .calendar-day.range-start {
+            background: #e85a7b !important;
+            color: white !important;
+            border-radius: 8px 0 0 8px !important;
+        }
+
+        .calendar-day.range-end {
+            background: #e85a7b !important;
+            color: white !important;
+            border-radius: 0 8px 8px 0 !important;
+        }
+
+        .calendar-day.single-selected {
+            background: #e85a7b !important;
+            color: white !important;
+            border-radius: 8px !important;
+        }
+
+        .calendar-day.range-start.range-end {
+            border-radius: 8px !important;
+        }
+
+        .date-info-box {
+            background: linear-gradient(135deg, #fff0f3 0%, #ffe5eb 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .date-info-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .date-info-value {
+            font-size: 18px;
+            color: #e85a7b;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .duration-display {
+            background: white;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .duration-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .duration-value {
+            font-size: 24px;
+            color: #e85a7b;
+            font-weight: 700;
+        }
+
+        .instruction-text {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-top: 15px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<div class="easy-event-wrapper">
+    <div class="easy-event-container-date">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Easy<br>Event</div>
+
+            <div class="steps">
+                <div class="step done">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Customisation</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">3</div>
+                    <div class="step-label">General questions</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Summary</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1 class="page-title">When will your event take place?</h1>
+
+            <div class="card">
+                <div class="content">
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <button class="calendar-nav" id="prevMonth">◀</button>
+                            <div class="calendar-month" id="monthDisplay">February 2025</div>
+                            <button class="calendar-nav" id="nextMonth">▶</button>
+                        </div>
+                        <div class="calendar-grid" id="calendarGrid"></div>
+                    </div>
+
+                    <div class="instruction-text" id="instructionText">
+                        Click a date to select start date, then click another date to select end date
+                    </div>
+
+                    <div class="date-info-box" id="dateInfoBox" style="display: none;">
+                        <div class="date-info-label">Event Period</div>
+                        <div class="date-info-value" id="dateRangeDisplay">-</div>
+
+                        <div class="duration-display">
+                            <div class="duration-label">Duration</div>
+                            <div class="duration-value" id="durationDisplay">-</div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="nav-buttons">
+                <button class="arrow-btn back btn-back" aria-label="Go back">◀</button>
+                <button class="arrow-btn btn-next" aria-label="Go next">▶</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+    // setActiveStep(1);
+    window.__pageInitFunction__ =function initDatePage() {
+        const now = new Date();
+        let currentMonth = now.getMonth();
+        let currentYear = now.getFullYear();
+        let selectedStartDate = null;
+        let selectedEndDate = null;
+
+        const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'];
+
+        const savedStartDate = getData('eventStartDate');
+        const savedEndDate = getData('eventEndDate');
+
+        if (savedStartDate) selectedStartDate = savedStartDate;
+        if (savedEndDate) selectedEndDate = savedEndDate;
+
+        function renderCalendar() {
+            const calendarGrid = document.getElementById('calendarGrid');
+            const monthDisplay = document.getElementById('monthDisplay');
+
+            monthDisplay.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            calendarGrid.innerHTML = '';
+
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayNames.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.style.textAlign = 'center';
+                dayHeader.style.fontWeight = '600';
+                dayHeader.style.fontSize = '12px';
+                dayHeader.style.color = '#6b7280';
+                dayHeader.style.padding = '10px 0';
+                dayHeader.textContent = day;
+                calendarGrid.appendChild(dayHeader);
+            });
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                calendarGrid.appendChild(emptyCell);
+            }
+
+            const today = new Date();
+            const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+
+                const currentDate = new Date(currentYear, currentMonth, day);
+
+                if (currentDate < todayDate) {
+                    dayElement.classList.add('disabled');
+                } else {
+                    const dateStr = `${currentYear}-${currentMonth}-${day}`;
+
+                    if (selectedStartDate && selectedEndDate) {
+                        const startDate = parseDateString(selectedStartDate);
+                        const endDate = parseDateString(selectedEndDate);
+                        const checkDate = new Date(currentYear, currentMonth, day);
+
+                        if (dateStr === selectedStartDate && dateStr === selectedEndDate) {
+                            // Same day for start and end
+                            dayElement.classList.add('range-start');
+                            dayElement.classList.add('range-end');
+                        } else if (dateStr === selectedStartDate) {
+                            // Start date
+                            dayElement.classList.add('range-start');
+                        } else if (dateStr === selectedEndDate) {
+                            // End date
+                            dayElement.classList.add('range-end');
+                        } else if (checkDate > startDate && checkDate < endDate) {
+                            // In between dates
+                            dayElement.classList.add('in-range');
+                        }
+                    } else if (selectedStartDate && dateStr === selectedStartDate) {
+                        // Only start date selected
+                        dayElement.classList.add('single-selected');
+                    }
+
+                    dayElement.addEventListener('click', function () {
+                        selectDate(currentYear, currentMonth, day);
+                    });
+                }
+
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(year, month, day) {
+            const dateStr = `${year}-${month}-${day}`;
+            const clickedDate = new Date(year, month, day);
+
+            if (!selectedStartDate) {
+                // First click - set start date
+                selectedStartDate = dateStr;
+                selectedEndDate = null;
+            } else if (!selectedEndDate) {
+                // Second click - set end date
+                const startDate = parseDateString(selectedStartDate);
+
+                if (clickedDate < startDate) {
+                    // Clicked date is before start, swap them
+                    selectedEndDate = selectedStartDate;
+                    selectedStartDate = dateStr;
+                } else if (clickedDate.getTime() === startDate.getTime()) {
+                    // Clicked same date, keep single day selection
+                    selectedEndDate = null;
+                } else {
+                    // Normal end date selection
+                    selectedEndDate = dateStr;
+                }
+            } else {
+                // Third click - start new selection
+                selectedStartDate = dateStr;
+                selectedEndDate = null;
+            }
+
+            updateDisplay();
+            renderCalendar();
+
+            saveData('eventStartDate', selectedStartDate);
+            saveData('eventEndDate', selectedEndDate);
+        }
+
+        function parseDateString(dateStr) {
+            const parts = dateStr.split('-');
+            return new Date(parseInt(parts[0]), parseInt(parts[1]), parseInt(parts[2]));
+        }
+
+        function formatDate(dateStr) {
+            const date = parseDateString(dateStr);
+            return `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+        }
+
+        function calculateDuration(startStr, endStr) {
+            const start = parseDateString(startStr);
+            const end = parseDateString(endStr);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            return diffDays === 0 ? '1 day' : `${diffDays + 1} days`;
+        }
+
+        function updateDisplay() {
+            const dateInfoBox = document.getElementById('dateInfoBox');
+            const dateRangeDisplay = document.getElementById('dateRangeDisplay');
+            const durationDisplay = document.getElementById('durationDisplay');
+            const instructionText = document.getElementById('instructionText');
+
+            if (selectedStartDate) {
+                dateInfoBox.style.display = 'block';
+
+                if (selectedEndDate && selectedStartDate !== selectedEndDate) {
+                    dateRangeDisplay.textContent = `${formatDate(selectedStartDate)} - ${formatDate(selectedEndDate)}`;
+                    durationDisplay.textContent = calculateDuration(selectedStartDate, selectedEndDate);
+                    instructionText.textContent = 'Click another date to change the selection';
+                } else {
+                    dateRangeDisplay.textContent = formatDate(selectedStartDate);
+                    durationDisplay.textContent = '1 day';
+                    instructionText.textContent = 'Click another date to select end date, or click a new date to change';
+                }
+            } else {
+                dateInfoBox.style.display = 'none';
+                instructionText.textContent = 'Click a date to select start date, then click another date to select end date';
+            }
+        }
+
+        document.getElementById('prevMonth').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        });
+
+        document.getElementById('nextMonth').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        });
+
+        renderCalendar();
+        updateDisplay();
+
+        const accessibility = getData('accessibility');
+        const backPage = accessibility === 'tickets-required'
+            ? '07_1_ticketing_details.html'
+            : '07_accessibility.html';
+
+        document.querySelector('.btn-back').addEventListener('click', () => {
+            loadScreen(backPage);
+        });
+
+        document.querySelector('.btn-next').addEventListener('click', () => {
+            loadScreen('09_time_selector.html');
+        });
+
+    }
+</script>
+</body>
+</html>

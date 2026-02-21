@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propose a Venue</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<div class="easy-event-wrapper">
+    <div class="easy-event-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Easy<br>Event</div>
+            <div class="steps">
+                <div class="step done">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step done">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Customisation</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">3</div>
+                    <div class="step-label">General questions</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Summary</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <div class="header">
+                    <div class="subtitle">Step 10</div>
+                    <h1>Propose Your Venue</h1>
+                    <p>Tell us about the location you have in mind</p>
+                </div>
+
+                <div class="content">
+                    <form id="proposeVenueForm">
+
+                        <!-- Address -->
+                        <div class="form-group">
+                            <label class="form-label">Address / Location Description *</label>
+                            <textarea class="form-input" data-key="venueAddress" rows="3"
+                                      placeholder="Street address, landmarks, or detailed description of the location"
+                                      style="resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- ══ Google Maps Section ══ -->
+                        <div class="form-group map-section">
+                            <label class="form-label">📍 Pin Your Venue on the Map</label>
+
+
+
+                            <!-- Postcode Search Row -->
+                            <div class="pincode-row">
+                                <input
+                                        type="text"
+                                        id="pincodeInput"
+                                        class="form-input"
+                                        placeholder="London postcode e.g. SW1A 1AA, E1 6AN, WC2N 5DU…"
+                                        maxlength="8"
+                                        inputmode="text"
+                                        data-key="venuePincode"
+                                        style="text-transform:uppercase;"
+                                />
+                                <button type="button" class="btn-search-map" id="btnSearchMap">
+                                    🔍 Find on Map
+                                </button>
+                            </div>
+
+                            <!-- Map Controls -->
+                            <div class="map-controls" id="mapControls" style="display:none;">
+                                <div class="map-badge">
+                                    <span>✋</span> Drag the pin to adjust location
+                                </div>
+                                <div class="map-toggle-group">
+                                    <button type="button" id="btnFlat"   class="active" onclick="setMapMode('flat')">🗺 Map</button>
+                                    <button type="button" id="btnSat"    onclick="setMapMode('satellite')">🛰 Satellite</button>
+                                    <button type="button" id="btn3D"     onclick="setMapMode('3d')">🏙 3D</button>
+                                </div>
+                            </div>
+
+                            <!-- Map Wrapper -->
+                            <div class="map-wrapper">
+                                <div id="venueMap"></div>
+
+                                <!-- Placeholder when no map loaded yet -->
+                                <div class="map-placeholder" id="mapPlaceholder">
+                                    <div class="map-placeholder-icon">🗺️</div>
+                                    <p>Enter a London postcode above to load the map</p>
+                                    <small>Supports draggable pin &amp; 3D view</small>
+                                </div>
+
+                                <!-- Loading overlay -->
+                                <div class="map-loading" id="mapLoading">
+                                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+                                        <div class="spinner"></div>
+                                        <div id="loadingCountdown" style="font-size:12px;color:#6366f1;font-weight:600;opacity:0;transition:opacity 0.3s;">
+                                            Timing out in <span id="countdownNum">10</span>s…
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 3D hint tooltip -->
+                                <div class="tilt-hint" id="tiltHint">🏙 Use Ctrl + drag to tilt into 3D view</div>
+                            </div>
+
+                            <!-- Error -->
+                            <div class="map-error" id="mapError">
+                                <span>⚠️</span>
+                                <span id="mapErrorMsg">Could not find this pincode. Please try again.</span>
+                            </div>
+
+                            <!-- Coordinates -->
+                            <div class="coords-display" id="coordsDisplay">
+                                <span class="label">📍 Pinned:</span>
+                                <span class="value" id="coordLat">—</span>
+                                <span class="sep">|</span>
+                                <span class="value" id="coordLng">—</span>
+                                <input type="hidden" data-key="venueLat" id="hiddenLat">
+                                <input type="hidden" data-key="venueLng" id="hiddenLng">
+                            </div>
+                        </div>
+                        <!-- ══ End Maps Section ══ -->
+
+                        <!-- Why This Venue -->
+                        <div class="form-group">
+                            <label class="form-label">Why This Venue? *</label>
+                            <textarea class="form-input" data-key="venueReason" rows="4"
+                                      placeholder="Tell us why this location is perfect for your event. Consider factors like accessibility, capacity, amenities, etc."
+                                      style="resize: vertical;"></textarea>
+                        </div>
+
+                        <!-- Photo Upload -->
+                        <div class="form-group">
+                            <label class="form-label">Upload Photo (Optional)</label>
+                            <div class="file-upload" id="fileUploadArea">
+                                <input type="file" id="venuePhoto" accept="image/*">
+                                <div class="file-upload-icon">📷</div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">Click to upload venue photo</div>
+                                <div style="font-size: 12px; color: #6b7280;">PNG, JPG up to 5MB</div>
+                                <div id="fileName" style="margin-top: 10px; font-size: 14px; color: #6366f1; font-weight: 600;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Note -->
+                        <div style="background:#e0e7ff;border-left:4px solid #6366f1;padding:15px;border-radius:8px;font-size:14px;color:#3730a3;">
+                            <strong>ℹ️ Note:</strong> Your venue proposal will be reviewed by the council. We'll contact you within 5-7 business days regarding approval.
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="arrow-btn back btn-back" aria-label="Go back" onclick="loadScreen('11_venue_selection.html')">&lt;</button>
+                <button class="arrow-btn btn-next" aria-label="Go next" onclick="loadScreen('13_review.html')">&gt;</button>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-text"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════════ Scripts ════════════════ -->
+<script src="common.js"></script>
+
+<!-- ① Load Google Maps JS API -->
+<script>
+    // ── Config ─────────────────────────────────────────
+    window.GOOGLE_MAPS_API_KEY = ''; // 🔑 Replace with your key
+
+    // ── State ───────────────────────────────────────────
+    let map     = null;
+    let marker  = null;
+    let mapMode = 'flat'; // 'flat' | 'satellite' | '3d'
+
+    // ── DOM refs ────────────────────────────────────────
+    const $pincode    = document.getElementById('pincodeInput');
+    const $btnSearch  = document.getElementById('btnSearchMap');
+    const $controls   = document.getElementById('mapControls');
+    const $placeholder= document.getElementById('mapPlaceholder');
+    const $loading    = document.getElementById('mapLoading');
+    const $error      = document.getElementById('mapError');
+    const $errorMsg   = document.getElementById('mapErrorMsg');
+    const $coords     = document.getElementById('coordsDisplay');
+    const $lat        = document.getElementById('coordLat');
+    const $lng        = document.getElementById('coordLng');
+    const $hidLat     = document.getElementById('hiddenLat');
+    const $hidLng     = document.getElementById('hiddenLng');
+    const $tiltHint   = document.getElementById('tiltHint');
+
+    // ── Load Maps API (loading=async requires callback pattern) ──
+    function loadMapsAPI() {
+        return new Promise((resolve, reject) => {
+            // Already fully loaded
+            if (window.google && window.google.maps && window.google.maps.importLibrary) {
+                resolve();
+                return;
+            }
+            // Already injected but not resolved yet — wait for callback
+            if (window.__mapsLoading) {
+                window.__mapsLoadQueue = window.__mapsLoadQueue || [];
+                window.__mapsLoadQueue.push({ resolve, reject });
+                return;
+            }
+            window.__mapsLoading = true;
+            window.__mapsLoadQueue = [{ resolve, reject }];
+
+            // Global callback fired by the Maps bootstrap once truly ready
+            window.__mapsReady = function () {
+                (window.__mapsLoadQueue || []).forEach(p => p.resolve());
+                window.__mapsLoadQueue = [];
+            };
+
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&loading=async&region=GB&callback=__mapsReady`;
+            script.async = true;
+            script.defer = true;
+            script.onerror = () => {
+                (window.__mapsLoadQueue || []).forEach(p =>
+                    p.reject(new Error('Failed to load Google Maps API')));
+                window.__mapsLoadQueue = [];
+            };
+            document.head.appendChild(script);
+        });
+    }
+
+    // ── Init map at given lat/lng ─────────────────────────
+    async function initMap(lat, lng, label) {
+        const center = { lat, lng };
+        const { Map } = await google.maps.importLibrary('maps');
+        const { Marker, Animation } = await google.maps.importLibrary('marker');
+
+        if (!map) {
+            map = new Map(document.getElementById('venueMap'), {
+                center,
+                zoom: 15,
+                mapTypeId: 'roadmap',
+                disableDefaultUI: false,
+                zoomControl: true,
+                mapTypeControl: false,
+                streetViewControl: true,
+                fullscreenControl: true,
+                tilt: 0,
+                heading: 0,
+                gestureHandling: 'greedy',
+            });
+        } else {
+            map.setCenter(center);
+            map.setZoom(15);
+        }
+
+        // Place / move draggable marker
+        if (!marker) {
+            marker = new Marker({
+                position: center,
+                map,
+                draggable: true,
+                animation: Animation.DROP,
+                title: label || 'Venue Location',
+            });
+
+            marker.addListener('dragend', (e) => {
+                updateCoords(e.latLng.lat(), e.latLng.lng());
+            });
+        } else {
+            marker.setPosition(center);
+            marker.setAnimation(Animation.DROP);
+        }
+
+        updateCoords(lat, lng);
+        applyMapMode(mapMode);
+    }
+
+    // ── Geocode pincode → lat/lng ────────────────────────
+    async function searchPincode() {
+        const pincode = $pincode.value.trim();
+        if (!pincode) { showError('Please enter a pincode first.'); return; }
+
+        // UI: loading state
+        $btnSearch.disabled = true;
+        $btnSearch.textContent = '⏳ Searching…';
+        $loading.classList.add('visible');
+        $error.classList.remove('visible');
+
+        // ── 10-second timeout guard ──────────────────────
+        let timedOut = false;
+        const $countdown    = document.getElementById('loadingCountdown');
+        const $countdownNum = document.getElementById('countdownNum');
+        let secondsLeft = 10;
+
+        // Show countdown label after 3s so it doesn't flash for fast responses
+        const countdownShowId = setTimeout(() => {
+            $countdown.style.opacity = '1';
+        }, 3000);
+
+        // Tick every second
+        const tickerId = setInterval(() => {
+            secondsLeft--;
+            $countdownNum.textContent = secondsLeft;
+        }, 1000);
+
+        function clearTimers() {
+            clearTimeout(timeoutId);
+            clearTimeout(countdownShowId);
+            clearInterval(tickerId);
+            $countdown.style.opacity = '0';
+        }
+
+        const timeoutId = setTimeout(() => {
+            timedOut = true;
+            clearInterval(tickerId);
+            clearTimeout(countdownShowId);
+            $countdown.style.opacity = '0';
+            $loading.classList.remove('visible');
+            $btnSearch.disabled = false;
+            $btnSearch.innerHTML = '🔍 Find on Map';
+            showError('⏱ Request timed out after 10 seconds. Check your internet connection or API key and try again.');
+        }, 10000);
+
+        try {
+            await loadMapsAPI();
+
+            if (timedOut) return; // API loaded but timeout already fired
+
+            // importLibrary is the correct way with loading=async
+            const { Geocoder } = await google.maps.importLibrary('geocoding');
+            const geocoder = new Geocoder();
+
+            // Force UK results — handles London postcodes like SW1A 1AA, E1 6AN, WC2N 5DU
+            geocoder.geocode({ address: pincode, componentRestrictions: { country: 'GB' }, region: 'GB' }, (results, status) => {
+                if (timedOut) return; // ignore late response
+                clearTimers();
+
+                $loading.classList.remove('visible');
+                $btnSearch.disabled = false;
+                $btnSearch.innerHTML = '🔍 Find on Map';
+
+                if (status === 'OK' && results.length > 0) {
+                    const loc   = results[0].geometry.location;
+                    const label = results[0].formatted_address;
+                    $placeholder.classList.add('hidden');
+                    $controls.style.display = 'flex';
+                    initMap(loc.lat(), loc.lng(), label);
+
+                    // Auto-fill address textarea if empty
+                    const addrTA = document.querySelector('[data-key="venueAddress"]');
+                    saveData('venueAddress', addrTA);
+                    if (addrTA && !addrTA.value.trim()) addrTA.value = label;
+                } else {
+                    showError(`"${pincode}" not found. Try a full London postcode like SW1A 1AA or E14 5AB.`);
+                }
+            });
+        } catch (err) {
+            if (timedOut) return;
+            clearTimers();
+            $loading.classList.remove('visible');
+            $btnSearch.disabled = false;
+            $btnSearch.innerHTML = '🔍 Find on Map';
+            showError('Maps API failed ');
+            console.error(err);
+        }
+    }
+
+    // ── Mode: flat / satellite / 3d ──────────────────────
+    function setMapMode(mode) {
+        mapMode = mode;
+        document.getElementById('btnFlat').classList.toggle('active', mode === 'flat');
+        document.getElementById('btnSat').classList.toggle('active',  mode === 'satellite');
+        document.getElementById('btn3D').classList.toggle('active',   mode === '3d');
+        if (map) applyMapMode(mode);
+    }
+
+    function applyMapMode(mode) {
+        if (!map) return;
+        if (mode === 'flat') {
+            map.setMapTypeId('roadmap');
+            map.setTilt(0);
+            $tiltHint.classList.remove('show');
+        } else if (mode === 'satellite') {
+            map.setMapTypeId('satellite');
+            map.setTilt(0);
+            $tiltHint.classList.remove('show');
+        } else if (mode === '3d') {
+            map.setMapTypeId('satellite');
+            map.setTilt(45);
+            map.setZoom(Math.max(map.getZoom(), 17)); // 3D needs higher zoom
+            $tiltHint.classList.add('show');
+            setTimeout(() => $tiltHint.classList.remove('show'), 4000);
+        }
+    }
+
+    // ── Helpers ──────────────────────────────────────────
+    function updateCoords(lat, lng) {
+        $lat.textContent    = lat.toFixed(6);
+        $lng.textContent    = lng.toFixed(6);
+        $hidLat.value       = lat.toFixed(6);
+        $hidLng.value       = lng.toFixed(6);
+        $coords.classList.add('visible');
+    }
+
+    function showError(msg) {
+        $errorMsg.textContent = msg;
+        $error.classList.add('visible');
+    }
+
+    // ── Event Bindings ───────────────────────────────────
+    $btnSearch.addEventListener('click', searchPincode);
+    $pincode.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); searchPincode(); } });
+    $pincode.addEventListener('input', () => { $pincode.value = $pincode.value.toUpperCase(); });
+</script>
+
+<script>
+    // ── Page Init ────────────────────────────────────────
+    window.__pageInitFunction__ = function initProposeVenuePage() {
+        initProgressBar(10, 14);
+        restoreSelections();
+        setupAutoSave();
+
+        // File upload handling
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput      = document.getElementById('venuePhoto');
+        const fileName       = document.getElementById('fileName');
+
+        fileUploadArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                fileName.textContent = `✓ ${this.files[0].name}`;
+                fileUploadArea.style.borderColor = '#10b981';
+                fileUploadArea.style.background  = '#f0fdf4';
+            }
+        });
+    };
+</script>
+</body>
+</html>

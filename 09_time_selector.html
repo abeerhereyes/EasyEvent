@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Time</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Time Range Selector Styles */
+        .time-selector-container {
+            padding: 40px 20px;
+        }
+
+        .time-icons {
+            display: flex;
+            justify-content: center;
+            gap: 100px;
+            margin-bottom: 20px;
+        }
+
+        .time-icon {
+            font-size: 48px;
+            opacity: 0.8;
+        }
+
+        .time-range-wrapper {
+            margin-bottom: 40px;
+        }
+
+        .time-track {
+            position: relative;
+            height: 20px;
+            background: #f5f5f5;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            margin: 0 20px;
+        }
+
+        .time-dots {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            pointer-events: none;
+            padding: 0;
+        }
+
+        .time-dot {
+            width: 8px;
+            height: 8px;
+            background: #000;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+
+        .time-dot.active {
+            background: #fff;
+            opacity: 1;
+        }
+
+        .time-range-fill {
+            position: absolute;
+            height: 20px;
+            background: #e85a7b;
+            border-radius: 50px;
+            top: 0;
+            left: 0;
+            transition: all 0.1s ease;
+        }
+
+        .time-handle {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 4px solid #e85a7b;
+            border-radius: 50%;
+            cursor: grab;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+
+        .time-handle:active {
+            cursor: grabbing;
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 4px 12px rgba(232, 90, 123, 0.4);
+        }
+
+        .time-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .time-label {
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .time-display-box {
+            background: linear-gradient(135deg, #f0f1ff 0%, #e0e7ff 100%);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .time-display-row {
+            display: flex;
+            justify-content: space-around;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .time-display-item {
+            flex: 1;
+        }
+
+        .time-display-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .time-display-value {
+            font-size: 28px;
+            color: #e85a7b;
+            font-weight: 700;
+        }
+
+        .duration-display {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .duration-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .duration-value {
+            font-size: 24px;
+            color: #e85a7b;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+<div class="easy-event-wrapper">
+    <div class="easy-event-container-date">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Easy<br>Event</div>
+
+            <div class="steps">
+                <div class="step done">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Customisation</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">3</div>
+                    <div class="step-label">General questions</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Summary</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1 class="page-title">What time will your event be?</h1>
+
+            <div class="card">
+                <div class="time-selector-container">
+                    <!-- Time Icons -->
+                    <div class="time-icons">
+                        <div class="time-icon">☀️</div>
+                        <div class="time-icon">🌙</div>
+                    </div>
+
+                    <!-- Time Range Selector -->
+                    <div class="time-range-wrapper">
+                        <div class="time-track" id="timeTrack">
+                            <!-- Dots -->
+                            <div class="time-dots" id="timeDots"></div>
+
+                            <!-- Range Fill -->
+                            <div class="time-range-fill" id="rangeFill"></div>
+
+                            <!-- Handles -->
+                            <div class="time-handle" id="startHandle"></div>
+                            <div class="time-handle" id="endHandle"></div>
+                        </div>
+
+                        <!-- Time Labels -->
+                        <div class="time-labels">
+                            <div class="time-label">0:00</div>
+                            <div class="time-label">15:00</div>
+                            <div class="time-label">24:00</div>
+                        </div>
+                    </div>
+
+                    <!-- Time Display -->
+                    <div class="time-display-box">
+                        <div class="time-display-row">
+                            <div class="time-display-item">
+                                <div class="time-display-label">Start Time</div>
+                                <div class="time-display-value" id="startTimeDisplay">9:00 AM</div>
+                            </div>
+                            <div class="time-display-item">
+                                <div class="time-display-label">End Time</div>
+                                <div class="time-display-value" id="endTimeDisplay">5:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="duration-display">
+                            <div class="duration-label">Duration</div>
+                            <div class="duration-value" id="durationDisplay">8 hours</div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="nav-buttons">
+                <button class="arrow-btn back btn-back" onclick="loadScreen('08_event_date.html')">◀</button>
+                <button class="arrow-btn btn-next" onclick="loadScreen('10_time_summary.html')">▶</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+    window.__pageInitFunction__ =function initTimeSelectorPage(){
+    // Time selector logic
+    const timeTrack = document.getElementById('timeTrack');
+    const rangeFill = document.getElementById('rangeFill');
+    const startHandle = document.getElementById('startHandle');
+    const endHandle = document.getElementById('endHandle');
+    const startTimeDisplay = document.getElementById('startTimeDisplay');
+    const endTimeDisplay = document.getElementById('endTimeDisplay');
+    const durationDisplay = document.getElementById('durationDisplay');
+    const timeDots = document.getElementById('timeDots');
+
+    // Create dots (24 dots for 24 hours)
+    const totalDots = 24;
+    for (let i = 0; i < totalDots; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'time-dot';
+        dot.setAttribute('data-hour', i);
+        timeDots.appendChild(dot);
+    }
+
+    // Initial values (in minutes from midnight)
+    let startTime = 540; // 9:00 AM
+    let endTime = 1020;  // 5:00 PM
+
+    // Load saved values
+    const savedStartTime = getData('startTime');
+    const savedEndTime = getData('endTime');
+    if (savedStartTime !== null) startTime = savedStartTime;
+    if (savedEndTime !== null) endTime = savedEndTime;
+
+    let isDragging = false;
+    let currentHandle = null;
+
+    function minutesToPercent(minutes) {
+        return (minutes / 1440) * 100; // 1440 minutes in a day
+    }
+
+    function percentToMinutes(percent) {
+        return Math.round((percent / 100) * 1440);
+    }
+
+    function snapToHour(minutes) {
+        // Snap to nearest hour (60 minutes)
+        return Math.round(minutes / 60) * 60;
+    }
+
+    function formatTime(minutes) {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const displayHours = hours % 12 || 12;
+        return `${displayHours}:${mins.toString().padStart(2, '0')} ${period}`;
+    }
+
+    function calculateDuration(start, end) {
+        const diff = end - start;
+        const hours = Math.floor(diff / 60);
+        const minutes = diff % 60;
+
+        if (hours === 0) {
+            return `${minutes} minutes`;
+        } else if (minutes === 0) {
+            return `${hours} hour${hours > 1 ? 's' : ''}`;
+        } else {
+            return `${hours} hour${hours > 1 ? 's' : ''} ${minutes} min`;
+        }
+    }
+
+    function updateDots() {
+        const dots = document.querySelectorAll('.time-dot');
+        const startHour = Math.floor(startTime / 60);
+        const endHour = Math.floor(endTime / 60);
+
+        dots.forEach((dot, index) => {
+            if (index >= startHour && index <= endHour) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function updateUI() {
+        const trackRect = timeTrack.getBoundingClientRect();
+        const trackWidth = trackRect.width;
+
+        const startPercent = minutesToPercent(startTime);
+        const endPercent = minutesToPercent(endTime);
+
+        const startPos = (startPercent / 100) * trackWidth;
+        const endPos = (endPercent / 100) * trackWidth;
+
+        startHandle.style.left = startPos + 'px';
+        endHandle.style.left = endPos + 'px';
+
+        rangeFill.style.left = startPos + 'px';
+        rangeFill.style.width = (endPos - startPos) + 'px';
+
+        startTimeDisplay.textContent = formatTime(startTime);
+        endTimeDisplay.textContent = formatTime(endTime);
+        durationDisplay.textContent = calculateDuration(startTime, endTime);
+
+        updateDots();
+
+        // Save to storage
+        saveData('startTime', startTime);
+        saveData('endTime', endTime);
+    }
+
+    function getTimeFromPosition(clientX) {
+        const trackRect = timeTrack.getBoundingClientRect();
+        const trackWidth = trackRect.width;
+        const relativeX = clientX - trackRect.left;
+        const percent = Math.max(0, Math.min(100, (relativeX / trackWidth) * 100));
+        return percentToMinutes(percent);
+    }
+
+    function onMouseDown(e, handle) {
+        isDragging = true;
+        currentHandle = handle;
+        document.body.style.cursor = 'grabbing';
+        e.preventDefault();
+    }
+
+    function onMouseMove(e) {
+        if (!isDragging) return;
+
+        const newTime = getTimeFromPosition(e.clientX);
+        const snappedTime = snapToHour(newTime);
+
+        if (currentHandle === 'start') {
+            startTime = Math.min(snappedTime, endTime - 60); // Min 1 hour duration
+            startTime = Math.max(0, startTime);
+        } else {
+            endTime = Math.max(snappedTime, startTime + 60);
+            endTime = Math.min(1440, endTime);
+        }
+
+        updateUI();
+    }
+
+    function onMouseUp() {
+        isDragging = false;
+        currentHandle = null;
+        document.body.style.cursor = 'default';
+    }
+
+    // Touch events for mobile
+    function onTouchStart(e, handle) {
+        onMouseDown(e.touches[0], handle);
+    }
+
+    function onTouchMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        onMouseMove(e.touches[0]);
+    }
+
+    // Event listeners
+    startHandle.addEventListener('mousedown', (e) => onMouseDown(e, 'start'));
+    endHandle.addEventListener('mousedown', (e) => onMouseDown(e, 'end'));
+
+    startHandle.addEventListener('touchstart', (e) => onTouchStart(e, 'start'));
+    endHandle.addEventListener('touchstart', (e) => onTouchStart(e, 'end'));
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+
+    document.addEventListener('touchmove', onTouchMove, { passive: false });
+    document.addEventListener('touchend', onMouseUp);
+
+    // Click on track to set time
+    timeTrack.addEventListener('click', (e) => {
+        if (e.target === timeTrack || e.target === rangeFill || e.target.classList.contains('time-dots') || e.target.classList.contains('time-dot')) {
+            const clickedTime = getTimeFromPosition(e.clientX);
+            const snappedTime = snapToHour(clickedTime);
+            const distToStart = Math.abs(snappedTime - startTime);
+            const distToEnd = Math.abs(snappedTime - endTime);
+
+            if (distToStart < distToEnd) {
+                startTime = Math.min(snappedTime, endTime - 60);
+            } else {
+                endTime = Math.max(snappedTime, startTime + 60);
+            }
+
+            updateUI();
+        }
+    });
+
+    // Initial render
+    updateUI();
+    }
+
+    // Navigation    setupNavigation('08_event_date.html', );
+
+</script>
+</body>
+</html>

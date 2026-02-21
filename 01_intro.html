@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduce Your Event — EasyEvent</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+<div class="easy-event-wrapper">
+    <div class="easy-event-container">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Easy<br>Event</div>
+            <div class="steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Customisation</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">3</div>
+                    <div class="step-label">General questions</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Summary</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero area -->
+        <div class="intro-hero">
+
+            <!-- Floating confetti particles -->
+
+
+            <!-- Main content card -->
+            <div class="intro-card">
+
+
+                <div class="intro-eyebrow">Community Event Platform</div>
+
+                <h1 class="intro-headline">
+                    Let's bring your<br>
+                    <span class="brand-word">event to life.</span>
+                </h1>
+
+                <p class="intro-sub">Step by step.</p>
+
+                <p class="intro-desc">
+                    Answer a handful of simple questions and we'll put together
+                    a complete proposal — ready for the committee in minutes.
+                </p>
+
+                <!-- What we'll cover -->
+                <div class="intro-features">
+                    <div class="intro-feature"><span class="f-icon">📅</span> Dates &amp; times</div>
+                    <div class="intro-feature"><span class="f-icon">📍</span> Venue</div>
+                    <div class="intro-feature"><span class="f-icon">👥</span> Audience</div>
+                    <div class="intro-feature"><span class="f-icon">🎨</span> Theme</div>
+                    <div class="intro-feature"><span class="f-icon">💷</span> Budget</div>
+                    <div class="intro-feature"><span class="f-icon">📋</span> Summary</div>
+                </div>
+                <div class="particles" aria-hidden="true">
+                    <div class="particle" style="left:8%;  --dur:7s;  --delay:0s; bottom: 10%">🎉</div>
+                    <div class="particle" style="left:18%; --dur:9s;  --delay:1.2s;bottom: 20%">✨</div>
+                    <div class="particle" style="left:30%; --dur:8s;  --delay:0.4s;bottom: 8%">🎊</div>
+                    <div class="particle" style="left:45%; --dur:11s; --delay:2.1s;bottom: 30%">🌟</div>
+                    <div class="particle" style="left:58%; --dur:7.5s;--delay:0.8s;bottom: 40%">🎈</div>
+                    <div class="particle" style="left:70%; --dur:10s; --delay:3.0s;bottom: 9%">🎉</div>
+                    <div class="particle" style="left:82%; --dur:8.5s;--delay:1.5s;bottom: 1%">✨</div>
+                    <div class="particle" style="left:92%; --dur:9.5s;--delay:0.2s;bottom: 20%">🎊</div>
+                    <div class="particle" style="left:24%; --dur:12s; --delay:4.0s;bottom: 40%">🌸</div>
+                    <div class="particle" style="left:66%; --dur:8s;  --delay:2.7s;bottom: 50%">🎶</div>
+                    <div class="particle" style="left:50%; --dur:14s; --delay:1.0s;bottom: 20%">🎈</div>
+                    <div class="particle" style="left:38%; --dur:9s;  --delay:5.0s;bottom: 10%">🌟</div>
+                </div>
+
+                <!-- Decorative geometric rings -->
+                <div class="geo geo-1" aria-hidden="true"></div>
+                <div class="geo geo-2" aria-hidden="true"></div>
+                <div class="geo geo-3" aria-hidden="true"></div>
+
+                <!-- CTA -->
+                <div class="intro-cta-wrap">
+                    <button class="intro-cta" onclick="loadScreen('02_share_details.html')" aria-label="Start creating your event">
+                        Start your event
+                        <span class="cta-arrow">→</span>
+                    </button>
+                    <p class="intro-steps-hint">Takes about <span>5 minutes</span> · <span>14 steps</span></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+    // Stagger the feature pills in with a small delay cascade
+    document.querySelectorAll('.intro-feature').forEach((el, i) => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(12px)';
+        el.style.transition = `opacity 0.4s ease ${0.55 + i * 0.06}s, transform 0.4s ease ${0.55 + i * 0.06}s`;
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            });
+        });
+    });
+</script>
+</body>
+</html>

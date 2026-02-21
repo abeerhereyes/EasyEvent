@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Tags</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="easy-event-wrapper">
+    <div class="easy-event-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Easy<br>Event</div>
+
+            <div class="steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Customisation</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">3</div>
+                    <div class="step-label">General questions</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Summary</div>
+                </div>
+            </div>
+        </div>
+<div class="container">
+
+
+    <div class="card">
+        <div class="header">
+            <div class="subtitle">Step 3</div>
+            <h1>Tag Your Event</h1>
+            <p>Select all that apply to help us categorize your event</p>
+        </div>
+
+        <div class="content">
+            <div class="question">What describes your event best?</div>
+
+            <div class="tags">
+                <button class="tag-btn">🎨 Arts & Culture</button>
+                <button class="tag-btn">🎵 Music</button>
+                <button class="tag-btn">🍔 Food & Drink</button>
+                <button class="tag-btn">⚽ Sports</button>
+                <button class="tag-btn">👨‍👩‍👧 Family Friendly</button>
+                <button class="tag-btn">📚 Educational</button>
+                <button class="tag-btn">💼 Business</button>
+                <button class="tag-btn">🌱 Environment</button>
+                <button class="tag-btn">❤️ Charity</button>
+                <button class="tag-btn">🎭 Entertainment</button>
+                <button class="tag-btn">🏃 Fitness & Wellness</button>
+                <button class="tag-btn">💻 Technology</button>
+                <button class="tag-btn">🎓 Workshop</button>
+                <button class="tag-btn">🎪 Festival</button>
+                <button class="tag-btn">🤝 Community</button>
+                <button class="tag-btn">🎉 Celebration</button>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="nav-buttons">
+        <button class="arrow-btn back btn-back" aria-label="Go back" onclick="loadScreen('03_event_type.html')"><</button>
+        <button class="arrow-btn btn-next" aria-label="Go next" onclick="loadScreen('05_group_size.html')">></button>
+    </div>
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <div class="progress-text"></div>
+    </div>
+</div>
+</div>
+<script src="common.js"></script>
+<script>
+    initProgressBar(3, 14);
+    restoreSelections();
+    setupTagButtons();
+</script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Venue — EasyEvent</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="easy-event-wrapper">
+    <div class="easy-event-container">
+
+        <div class="sidebar">
+            <div class="logo">Easy<br>Event</div>
+            <div class="steps">
+                <div class="step done">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step done">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Customisation</div>
+                </div>
+                <div class="step active">
+                    <div class="step-number">3</div>
+                    <div class="step-label">General questions</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Summary</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="card">
+                <div class="header">
+                    <div class="subtitle">Step 10 of 14</div>
+                    <h1>Choose a Venue</h1>
+                    <p>Explore available spaces across Islington, London</p>
+                </div>
+
+                <div class="content">
+
+                    <!-- ══ MAP VIEW ══════════════════════════════ -->
+                    <div class="venue-map-section" id="mapSection">
+
+                        <div class="venue-map-canvas" id="mapCanvas">
+
+                            <span class="map-street-label" style="top:9%;left:13%;transform:rotate(-8deg);">Upper Street</span>
+                            <span class="map-street-label" style="top:38%;left:3%;transform:rotate(88deg);">Essex Road</span>
+                            <span class="map-street-label" style="top:70%;left:30%;transform:rotate(-3deg);">City Road</span>
+                            <span class="map-street-label" style="top:20%;left:54%;transform:rotate(7deg);">Holloway Road</span>
+                            <span class="map-street-label" style="top:55%;left:62%;transform:rotate(-5deg);">Highbury Grove</span>
+                            <span class="map-street-label" style="top:82%;left:50%;transform:rotate(2deg);">Old Street</span>
+
+                            <div class="venue-pin" style="top:28%;left:30%;" data-id="0">
+                                <div class="venue-pin-tip">Islington Assembly Hall</div>
+                                <div class="venue-pin-body"><span class="venue-pin-emoji">🎭</span></div>
+                                <div class="venue-pin-tail"></div>
+                            </div>
+                            <div class="venue-pin" style="top:38%;left:66%;" data-id="1">
+                                <div class="venue-pin-tip">Highbury Fields Pavilion</div>
+                                <div class="venue-pin-body"><span class="venue-pin-emoji">🌳</span></div>
+                                <div class="venue-pin-tail"></div>
+                            </div>
+                            <div class="venue-pin" style="top:52%;left:22%;" data-id="2">
+                                <div class="venue-pin-tip">The Angel Centre</div>
+                                <div class="venue-pin-body"><span class="venue-pin-emoji">🏛️</span></div>
+                                <div class="venue-pin-tail"></div>
+                            </div>
+                            <div class="venue-pin" style="top:20%;left:75%;" data-id="3">
+                                <div class="venue-pin-tip">Arsenal Community Hub</div>
+                                <div class="venue-pin-body"><span class="venue-pin-emoji">⚽</span></div>
+                                <div class="venue-pin-tail"></div>
+                            </div>
+                            <div class="venue-pin" style="top:65%;left:44%;" data-id="4">
+                                <div class="venue-pin-tip">Islington Central Library</div>
+                                <div class="venue-pin-body"><span class="venue-pin-emoji">📚</span></div>
+                                <div class="venue-pin-tail"></div>
+                            </div>
+                            <div class="venue-pin" style="top:76%;left:62%;" data-id="5">
+                                <div class="venue-pin-tip">St Mary's Church Hall</div>
+                                <div class="venue-pin-body"><span class="venue-pin-emoji">⛪</span></div>
+                                <div class="venue-pin-tail"></div>
+                            </div>
+                        </div>
+
+                        <div id="mapBanner" class="venue-map-banner" style="display:none;"></div>
+                        <div id="mapHint" class="venue-map-hint">📍 Tap a pin to select a venue</div>
+
+                    </div>
+
+                    <!-- ══ LIST VIEW ══════════════════════════════ -->
+                    <div class="venue-list-view" id="listSection">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <!-- ══ TOGGLE TABS (always visible at bottom) ══ -->
+                    <div class="venue-view-tabs">
+                        <button class="venue-tab-btn active" id="tabMap">
+                            <span class="venue-tab-icon">🗺</span> Map
+                        </button>
+                        <button class="venue-tab-btn" id="tabList">
+                            <span class="venue-tab-icon">☰</span> List
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="arrow-btn back btn-back" aria-label="Go back"
+                        onclick="loadScreen('11_venue_selection.html')">&lt;</button>
+                <button class="arrow-btn btn-next" aria-label="Go next"
+                        onclick="loadScreen('13_review.html')">&gt;</button>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar"><div class="progress-fill"></div></div>
+                <div class="progress-text"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="common.js"></script>
+<script>
+    window.__pageInitFunction__ = function initVenueSelectPage() {
+        initProgressBar(10, 14);
+
+        const VENUES = [
+            {
+                id: 0, name: 'Islington Assembly Hall', emoji: '🎭',
+                photoClass: 'vp-assembly', photoLabel: 'Arts & Events',
+                address: 'Upper Street, N1 2UD',
+                tags: ['400 capacity', 'Full stage', 'Bar hire', 'Accessible'],
+                about: 'A grand Edwardian hall at the heart of Islington with a full proscenium stage, sprung dance floor, and ornate plasterwork. Perfect for large-scale community galas, performances, and award evenings.',
+                facilities: 'Stage · PA system · Bar · Green room · Changing rooms',
+                transport: '5 min walk from Angel (Northern line)',
+                pincode:'N1 2UD',
+            },
+            {
+                id: 1, name: 'Highbury Fields Pavilion', emoji: '🌳',
+                photoClass: 'vp-highbury', photoLabel: 'Outdoor & Green',
+                address: 'Highbury Fields, N5 1AR',
+                tags: ['120 capacity', 'Covered outdoor', 'Parking', 'Dog-friendly'],
+                about: "A spacious covered pavilion set within Islington's largest open green space. Ideal for summer fairs, sports days, and community picnics with stunning field views.",
+                facilities: 'Picnic tables · BBQ area · Adjacent sports pitches · Toilets',
+                transport: '8 min walk from Highbury & Islington (Overground)',
+                pincode:'N5 1AR',
+            },
+            {
+                id: 2, name: 'The Angel Centre', emoji: '🏛️',
+                photoClass: 'vp-angel', photoLabel: 'Community Hub',
+                address: 'Angel, Islington, N1 9LQ',
+                tags: ['250 capacity', 'Multi-room', 'Catering kitchen', 'Accessible'],
+                about: 'A versatile community space in the heart of Angel, comprising a main hall, breakout rooms, and a professional kitchen. Hosts everything from council meetings to neighbourhood festivals.',
+                facilities: 'Main hall · 3 meeting rooms · Commercial kitchen · Lift access',
+                transport: 'Angel tube station — 2 min walk',
+                pincode:'N1 9LQ',
+            },
+            {
+                id: 3, name: 'Arsenal Community Hub', emoji: '⚽',
+                photoClass: 'vp-arsenal', photoLabel: 'Sports & Activity',
+                address: 'Holloway Road, N7 7AJ',
+                tags: ['180 capacity', 'Indoor sports', 'Parking', 'Accessible'],
+                about: 'Located close to the Emirates Stadium, this modern hub offers a large sports hall and community rooms. Great for active events, youth programmes, and school competitions.',
+                facilities: 'Sports hall · Changing rooms · Meeting rooms · Parking (30 spaces)',
+                transport: 'Arsenal tube station — 4 min walk (Piccadilly line)',
+                pincode:'N7 7AJ',
+            },
+            {
+                id: 4, name: 'Islington Central Library', emoji: '📚',
+                photoClass: 'vp-library', photoLabel: 'Learning & Culture',
+                address: '2 Fieldway Crescent, N5 1PF',
+                tags: ['80 capacity', 'Quiet indoor', 'AV equipment', 'Accessible'],
+                about: "The main events room within Islington's central library offers an intimate, calm setting for talks, workshops, readings, and exhibitions in a literary environment.",
+                facilities: 'Projector & screen · Hearing loop · Accessible WC · Café nearby',
+                transport: 'Highbury & Islington — 10 min walk or bus 19/30',
+                pincode:'N5 1PF',
+            },
+            {
+                id: 5, name: "St Mary's Church Hall", emoji: '⛪',
+                photoClass: 'vp-stmarys', photoLabel: 'Historic Venue',
+                address: 'Upper Street, Islington, N1 1RL',
+                tags: ['150 capacity', 'Historic hall', 'Garden access', 'Heritage space'],
+                about: "A beautifully maintained Victorian hall attached to St Mary's Church on Upper Street. Original wooden beams and stained-glass windows create a stunning setting for heritage events and cultural evenings.",
+                facilities: 'Main hall · Garden terrace · Piano · Kitchen · Period features',
+                transport: 'Angel tube station — 6 min walk',pincode:'N1 1RL',
+            },
+        ];
+
+        let selectedId = null;
+        try {
+            const s = getData('selectedVenueId');
+            if (s !== null && s !== undefined) selectedId = Number(s);
+        } catch(e) {}
+
+        const pins        = document.querySelectorAll('.venue-pin');
+        const listSection = document.getElementById('listSection');
+        const mapSection  = document.getElementById('mapSection');
+        const mapBanner   = document.getElementById('mapBanner');
+        const mapHint     = document.getElementById('mapHint');
+        const tabMap      = document.getElementById('tabMap');
+        const tabList     = document.getElementById('tabList');
+
+        /* ── Build cards ──────────────────────────────────────────── */
+        VENUES.forEach(v => {
+            const card = document.createElement('div');
+            card.className = 'venue-card';
+            card.dataset.id = v.id;
+
+            card.innerHTML = `
+            <div class="venue-card-inner">
+                <div class="venue-card-front">
+                    <div class="venue-card-photo ${v.photoClass}">
+                        <div class="venue-card-photo-check">✓</div>
+                        <div class="venue-card-photo-label">${v.photoLabel}</div>
+                    </div>
+                    <div class="venue-card-body">
+                        <div class="venue-card-name">${v.emoji}&nbsp; ${v.name}</div>
+                        <div class="venue-card-addr">📍 ${v.address}</div>
+                        <div class="venue-card-tags">
+                            ${v.tags.map(t => `<span class="venue-card-tag">${t}</span>`).join('')}
+                        </div>
+                        <div class="venue-card-actions">
+                            <button class="venue-card-btn-select" data-action="select">Select venue</button>
+                            <button class="venue-card-btn-info" data-action="flip">ℹ&nbsp; More info</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="venue-card-back">
+                    <div class="venue-card-back-title">${v.emoji} ${v.name}</div>
+                    <div class="venue-card-back-rows">
+                        <div class="venue-card-back-row">
+                            <span class="venue-card-back-row-icon">📝</span>
+                            <span class="venue-card-back-row-text">${v.about}</span>
+                        </div>
+                        <div class="venue-card-back-row">
+                            <span class="venue-card-back-row-icon">🔧</span>
+                            <span class="venue-card-back-row-text"><strong>Facilities:</strong> ${v.facilities}</span>
+                        </div>
+                        <div class="venue-card-back-row">
+                            <span class="venue-card-back-row-icon">🚇</span>
+                            <span class="venue-card-back-row-text"><strong>Transport:</strong> ${v.transport}</span>
+                        </div>
+                    </div>
+                    <div class="venue-card-back-actions">
+                        <button class="venue-card-btn-select" data-action="select" style="flex:1">Select venue</button>
+                        <button class="venue-card-btn-flip-back" data-action="flip">← Back</button>
+                    </div>
+                </div>
+            </div>`;
+
+            card.querySelectorAll('[data-action="flip"]').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    card.classList.toggle('flipped');
+                });
+            });
+
+            card.querySelectorAll('[data-action="select"]').forEach(btn => {
+                btn.addEventListener('click', e => {
+                    e.stopPropagation();
+                    selectVenue(v.id);
+                });
+            });
+
+            listSection.appendChild(card); // ← closes the forEach correctly
+        });
+
+        /* ── Everything below is OUTSIDE the forEach ──────────────── */
+
+        pins.forEach(pin => {
+            pin.addEventListener('click', () => selectVenue(Number(pin.dataset.id)));
+        });
+
+        if (selectedId !== null) {
+            applyMapSelection(selectedId);
+            applyListSelection(selectedId);
+            showMapBanner(selectedId);
+        }
+
+        function selectVenue(id) {
+            selectedId = id;
+            try {
+                saveData('selectedVenueId', id);
+                saveData('venueAddress', VENUES[selectedId]["address"]);
+                saveData('venuePincode', VENUES[selectedId]['pincode']);
+                saveData('venueReason', );
+            } catch(e) {}
+            applyMapSelection(id);
+            applyListSelection(id);
+            showMapBanner(id);
+        }
+
+        function applyMapSelection(id) {
+            pins.forEach(p => p.classList.toggle('selected', Number(p.dataset.id) === id));
+        }
+
+        function applyListSelection(id) {
+            document.querySelectorAll('.venue-card').forEach(card => {
+                const match = Number(card.dataset.id) === id;
+                card.classList.toggle('selected', match);
+                card.querySelectorAll('[data-action="select"]').forEach(btn => {
+                    btn.innerHTML = match ? '✓&nbsp; Selected' : 'Select venue';
+                });
+            });
+        }
+
+        function showMapBanner(id) {
+            const v = VENUES[id];
+            mapHint.style.display = 'none';
+            mapBanner.style.display = 'flex';
+            mapBanner.innerHTML = `
+            <div class="venue-map-banner-emoji">${v.emoji}</div>
+            <div>
+                <div class="venue-map-banner-name">${v.name}</div>
+                <div class="venue-map-banner-addr">📍 ${v.address} · ${v.tags[0]}</div>
+            </div>
+            <div class="venue-map-banner-check">✓</div>`;
+        }
+
+        tabMap.addEventListener('click', () => {
+            tabMap.classList.add('active');
+            tabList.classList.remove('active');
+            mapSection.classList.remove('hidden');
+            listSection.classList.remove('active');
+            listSection.classList.remove('grid-mode');
+        });
+
+        tabList.addEventListener('click', () => {
+            tabList.classList.add('active');
+            tabMap.classList.remove('active');
+            listSection.classList.add('active');
+            listSection.classList.add('grid-mode');
+            mapSection.classList.add('hidden');
+        });
+    };
+</script>
+</body>
+</html>

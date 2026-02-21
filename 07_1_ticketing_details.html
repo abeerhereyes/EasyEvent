@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticketing Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="easy-event-wrapper">
+    <div class="easy-event-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Easy<br>Event</div>
+
+            <div class="steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Customisation</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">3</div>
+                    <div class="step-label">General questions</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Summary</div>
+                </div>
+            </div>
+        </div>
+<div class="container">
+
+
+    <div class="card">
+        <div class="header">
+            <div class="subtitle">Step 6</div>
+            <h1>Ticketing Details</h1>
+        </div>
+
+        <div class="content">
+            <form id="ticketingForm">
+                <div class="form-group">
+                    <label class="form-label">Ticket Price</label>
+                    <input type="text" class="form-input" data-key="ticketPrice" id="ticketPrice" placeholder="£0.00">
+                </div>
+
+                <div class="form-group">
+                    <div class="form-checkbox">
+                        <input type="checkbox" id="ticketsFree" data-key="ticketsFree">
+                        <label for="ticketsFree">It's for free</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Number of Tickets Available</label>
+                    <input type="number" class="form-input" data-key="numberOfTickets" placeholder="e.g. 100">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ticketing Contact</label>
+                    <input type="text" class="form-input" data-key="ticketContact" placeholder="Email or phone for ticket inquiries">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ticket Platform</label>
+                    <select class="form-select" data-key="ticketPlatform">
+                        <option value="">Select platform...</option>
+                        <option value="eventbrite">Eventbrite</option>
+                        <option value="ticketmaster">Ticketmaster</option>
+                        <option value="eventim">Eventim</option>
+                        <option value="website">Our own website</option>
+                        <option value="email">Email registration</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+
+
+    </div>
+    <div class="nav-buttons">
+        <button class="arrow-btn back btn-back" aria-label="Go back" onclick="loadScreen('07_accessibility.html')"><</button>
+        <button class="arrow-btn btn-next" aria-label="Go next" onclick="loadScreen('08_event_date.html')">></button>
+    </div>
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <div class="progress-text"></div>
+    </div>
+</div>
+</div>
+
+<script src="common.js"></script>
+    <script>
+        window.__pageInitFunction__ =function initTicketingPage() {
+            initProgressBar(6, 14);
+            restoreSelections();
+            setupAutoSave();
+
+            const freeCheckbox = document.getElementById('ticketsFree');
+            const priceInput = document.getElementById('ticketPrice');
+
+            freeCheckbox.addEventListener('change', function () {
+                if (this.checked) {
+                    priceInput.value = '£0.00';
+                    priceInput.disabled = true;
+                } else {
+                    priceInput.disabled = false;
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

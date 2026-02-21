@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Size</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="easy-event-wrapper">
+    <div class="easy-event-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Easy<br>Event</div>
+
+            <div class="steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Customisation</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">3</div>
+                    <div class="step-label">General questions</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Summary</div>
+                </div>
+            </div>
+        </div>
+<div class="container">
+
+
+    <div class="card">
+        <div class="header">
+            <div class="subtitle">Step 4</div>
+            <h1>Expected Attendance</h1>
+        </div>
+
+        <div class="content-grid">
+            <div class="question">How many people will come?</div>
+
+            <div class="options">
+                <button class="option-btn" data-key="groupSize" data-value="0-50">
+                    <div style="font-size: 32px; margin-bottom: 8px;">👥</div>
+                    <div style="font-weight: 600; font-size: 18px;">0 - 50 people</div>
+                    <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">Small, intimate gathering</div>
+                </button>
+
+                <button class="option-btn" data-key="groupSize" data-value="50-100">
+                    <div style="font-size: 32px; margin-bottom: 8px;">👥👥</div>
+                    <div style="font-weight: 600; font-size: 18px;">50 - 100 people</div>
+                    <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">Medium-sized event</div>
+                </button>
+
+                <button class="option-btn" data-key="groupSize" data-value="100+">
+                    <div style="font-size: 32px; margin-bottom: 8px;">👥👥👥</div>
+                    <div style="font-weight: 600; font-size: 18px;">100+ people</div>
+                    <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">Large event</div>
+                </button>
+
+                <button class="option-btn" data-key="groupSize" data-value="not-sure">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🤷</div>
+                    <div style="font-weight: 600; font-size: 18px;">Not sure yet</div>
+                    <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">Still figuring it out</div>
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="nav-buttons">
+        <button class="arrow-btn back btn-back" aria-label="Go back" onclick="loadScreen('04_event_tags.html')"><</button>
+        <button class="arrow-btn btn-next" aria-label="Go next" onclick="loadScreen('06_audience.html')">></button>
+    </div>
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <div class="progress-text"></div>
+    </div>
+</div>
+</div>
+
+<script src="common.js"></script>
+<script>
+    initProgressBar(4, 14);
+    restoreSelections();
+    setupOptionButtons();
+</script>
+</body>
+</html>

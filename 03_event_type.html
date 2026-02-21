@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Type</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="easy-event-wrapper">
+    <div class="easy-event-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Easy<br>Event</div>
+
+            <div class="steps">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Customisation</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">3</div>
+                    <div class="step-label">General questions</div>
+                </div>
+                <div class="step inactive">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Summary</div>
+                </div>
+            </div>
+        </div>
+<div class="container">
+
+
+    <div class="card">
+        <div class="header">
+            <div class="subtitle">Step 2</div>
+            <h1>What Kind of Event?</h1>
+        </div>
+
+        <div class="content">
+            <div class="question">What kind of event are you planning?</div>
+
+            <div class="options">
+                <button class="option-btn" data-key="eventType" data-value="indoor">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🏢</div>
+                    <div style="font-weight: 600; font-size: 18px;">Indoor Event</div>
+                    <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">Community center, hall, or indoor venue</div>
+                </button>
+
+                <button class="option-btn" data-key="eventType" data-value="outdoor">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🌳</div>
+                    <div style="font-weight: 600; font-size: 18px;">Outdoor Event</div>
+                    <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">Park, garden, or outdoor space</div>
+                </button>
+
+                <button class="option-btn" data-key="eventType" data-value="street-party">
+                    <div style="font-size: 32px; margin-bottom: 8px;">🎊</div>
+                    <div style="font-weight: 600; font-size: 18px;">Street Party</div>
+                    <div style="font-size: 14px; color: #6b7280; margin-top: 4px;">Road closure, neighborhood celebration</div>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="nav-buttons">
+        <button class="arrow-btn back btn-back" aria-label="Go back" onclick="loadScreen('02_share_details.html')"><</button>
+        <button class="arrow-btn btn-next" aria-label="Go next" onclick="loadScreen('04_event_tags.html')">></button>
+    </div>
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        <div class="progress-text"></div>
+    </div>
+</div>
+</div>
+<script src="common.js"></script>
+<script>
+    initProgressBar(2, 14);
+    restoreSelections();
+    setupOptionButtons();
+</script>
+</body>
+</html>
