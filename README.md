@@ -5,7 +5,7 @@ Welcome to the **Easy Event** documentation! This project is a modern, highly in
 Below you'll find a walkthrough of each code file and its role in the overall flow, complete with detailed feature explanations, design highlights, and technical insights.
 
 
-Netlify Link - https://fantastic-pothos-2c4386.netlify.app/
+ Link - [https://fantastic-pothos-2c4386.netlify.app/](https://abeerhereyes.github.io/EasyEvent/)
 
 ---
 
